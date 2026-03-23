@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIPEU</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/style.css">
+    
+    <!-- Theme Configuration Override -->
+    <style>
+        :root {
+            --primary-color: #8B5E2A;
+            --secondary-color: #5A8DA8;
+            --bg-color: #FAF8F3;
+            --white: #FFFFFF;
+            --text-color: #2C2C2C;
+            --light-text: #6F6F6F;
+            --border-color: #E5E5E5;
+            
+            --success: #22C55E;
+            --warning: #FACC15;
+            --info: #3B82F6;
+        }
+    </style>
+    <script>
+        const themes = {
+            default: {
+                "--primary-color": "#8B5E2A",
+                "--secondary-color": "#5A8DA8"
+            },
+            blue: { "--primary-color": "#1E3A8A", "--secondary-color": "#3B82F6" },
+            green: { "--primary-color": "#2E7D32", "--secondary-color": "#66BB6A" },
+            gold: { "--primary-color": "#C9A227", "--secondary-color": "#E5C158" },
+            ocean: { "--primary-color": "#0EA5E9", "--secondary-color": "#38BDF8" }
+        };
+
+        function applyTheme(themeName) {
+            if (!themes[themeName]) return;
+            const theme = themes[themeName];
+            Object.keys(theme).forEach(key => {
+                document.documentElement.style.setProperty(key, theme[key]);
+            });
+            localStorage.setItem("sipeu_theme", themeName);
+        }
+
+        // Fast synchronous check to prevent FOUC (flash of unstyled content)
+        const savedTheme = localStorage.getItem("sipeu_theme");
+        if (savedTheme && themes[savedTheme]) {
+            applyTheme(savedTheme);
+        }
+        
+        // Sync both dropdown menu selections when DOM loads
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".theme-select").forEach(select => {
+                if (savedTheme) select.value = savedTheme;
+            });
+        });
+    </script>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body oncontextmenu="return false;">
+
+<nav class="navbar">
+    <div class="container">
+        <!-- Desktop Theme Switcher -->
+        <div class="theme-desktop">
+            <select class="theme-select" onchange="applyTheme(this.value)" style="border: 1px solid var(--border-color); background: var(--bg-color); color: var(--primary-color); padding: 4px 8px; border-radius: 4px; font-size: 14px; cursor: pointer; outline: none;">
+                <option value="default">Default Theme</option>
+                <option value="blue">Corporate Blue</option>
+                <option value="green">Nature Premium</option>
+                <option value="gold">Premium Gold</option>
+                <option value="ocean">Ocean Clean</option>
+            </select>
+        </div>
+
+        <a href="index.html" class="nav-brand">
+            <img src="assets/logo.png" alt="Logo">
+            <span>SIPEU</span>
+        </a>
+        
+        <ul class="nav-links">
+            <li><a href="index.html" class="">Home</a></li>
+            <li><a href="about.html" class="">About Us</a></li>
+            <li class="dropdown">
+                <a href="#" class="">Schemes ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="loan.html">Loan Scheme</a></li>
+                    <li><a href="advance.html">Advance Scheme</a></li>
+                </ul>
+            </li>
+            <li><a href="calculator.html" class="">Loan Calculator</a></li>
+            <li><a href="team.html" class="active">Leadership & Gallery</a></li>
+            <li><a href="contact.html" class="">Contact Us</a></li>
+            
+            <li class="theme-mobile">
+                <label>Theme Selection</label>
+                <select class="theme-select" onchange="applyTheme(this.value)">
+                    <option value="default">Default Theme</option>
+                    <option value="blue">Corporate Blue</option>
+                    <option value="green">Nature Premium</option>
+                    <option value="gold">Premium Gold</option>
+                    <option value="ocean">Ocean Clean</option>
+                </select>
+            </li>
+        </ul>
+
+        <button class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>
+
+<style>
+.gm-card {
+    background: var(--white);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    display: flex;
+    max-width: 900px;
+    margin: -40px auto 60px;
+    position: relative;
+    z-index: 10;
+}
+
+.gm-image {
+    width: 40%;
+    object-fit: cover;
+}
+
+.gm-info {
+    padding: 40px;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.gm-info h2 {
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.gm-info .role {
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.directors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.director-card {
+    background: var(--white);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.director-card:hover {
+    transform: translateY(-10px);
+}
+
+.director-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.director-info {
+    padding: 25px 20px;
+}
+
+.director-info h3 {
+    margin-bottom: 5px;
+    font-size: 1.25rem;
+}
+
+.director-info .role {
+    color: var(--secondary-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.gallery-item {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    height: 250px;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .gm-card {
+        flex-direction: column;
+    }
+    .gm-image, .gm-info {
+        width: 100%;
+    }
+    .gm-image {
+        height: 300px;
+    }
+}
+</style>
+
+<section class="page-banner" style="background-image: url('assets/hero.jpg');">
+    <div class="overlay"></div>
+    <div class="banner-content container">
+        <h1>Leadership & Gallery</h1>
+        <p>Meet the dedicated team driving SIPEU Credit Limited forward.</p>
+    </div>
+</section>
+
+<section class="section" style="padding-top: 0;">
+    <div class="container">
+        <!-- General Manager -->
+        <div class="gm-card">
+            <img src="assets/gm.jpg" alt="Lan " class="gm-image">
+            <div class="gm-info">
+                <h2>Lan </h2>
+                <div class="role">General Manager</div>
+                <p>With over 20 years of experience in the financial sector, John leads SIPEU Credit Limited with a vision of inclusive growth.</p>
+            </div>
+        </div>
+
+        <!-- Directors -->
+        <h2 class="text-center" style="margin-bottom: 40px;">Board of Directors</h2>
+        <div class="directors-grid">
+                        <div class="director-card">
+                <img src="assets/director1.jpg" alt="Jane Smith" class="director-image">
+                <div class="director-info">
+                    <h3>Jane Smith</h3>
+                    <div class="role">Director of Operations</div>
+                    <p style="font-size: 0.9rem; margin-bottom: 0;">Jane oversees daily operations ensuring seamless service delivery to all our members.</p>
+                </div>
+            </div>
+                        <div class="director-card">
+                <img src="assets/director2.jpg" alt="Michael Johnson" class="director-image">
+                <div class="director-info">
+                    <h3>Michael Johnson</h3>
+                    <div class="role">Director of Finance</div>
+                    <p style="font-size: 0.9rem; margin-bottom: 0;">Michael manages the financial health and strategic investments of the institution.</p>
+                </div>
+            </div>
+                        <div class="director-card">
+                <img src="assets/director3.jpg" alt="Sarah Williams" class="director-image">
+                <div class="director-info">
+                    <h3>Sarah Williams</h3>
+                    <div class="role">Director of HR</div>
+                    <p style="font-size: 0.9rem; margin-bottom: 0;">Sarah brings exceptional talent to our team and fosters a culture of excellence.</p>
+                </div>
+            </div>
+                        <div class="director-card">
+                <img src="assets/director4.jpg" alt="David Brown" class="director-image">
+                <div class="director-info">
+                    <h3>David Brown</h3>
+                    <div class="role">Director of IT</div>
+                    <p style="font-size: 0.9rem; margin-bottom: 0;">David drives the digital transformation of our services for enhanced accessibility.</p>
+                </div>
+            </div>
+                        <div class="director-card">
+                <img src="assets/director5.jpg" alt="Emily Davis" class="director-image">
+                <div class="director-info">
+                    <h3>Emily Davis</h3>
+                    <div class="role">Director of Member Relations</div>
+                    <p style="font-size: 0.9rem; margin-bottom: 0;">Emily ensures that member satisfaction remains at the core of everything we do.</p>
+                </div>
+            </div>
+                    </div>
+    </div>
+</section>
+
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <h2 class="text-center" style="margin-bottom: 30px;">Our Team Gallery</h2>
+        <div class="gallery-grid">
+                        <div class="gallery-item">
+                <img src="assets/team1.jpg" alt="Gallery Image">
+            </div>
+                        <div class="gallery-item">
+                <img src="assets/team2.jpg" alt="Gallery Image">
+            </div>
+                        <div class="gallery-item">
+                <img src="assets/team3.jpg" alt="Gallery Image">
+            </div>
+                    </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>SIPEU</h3>
+                <p>To provide accessible, affordable, and sustainable financial services to public servants, fostering economic independence and growth.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 10px;"><a href="index.html" style="color: #ccc;">Home</a></li>
+                    <li style="margin-bottom: 10px;"><a href="about.html" style="color: #ccc;">About Us</a></li>
+                    <li style="margin-bottom: 10px;"><a href="services.html" style="color: #ccc;">Services</a></li>
+                    <li style="margin-bottom: 10px;"><a href="calculator.html" style="color: #ccc;">Loan Calculator</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> 123 SIPEU HQ Building, Mendana Avenue, Honiara, Solomon Islands</p>
+                <p><i class="fas fa-phone"></i> +677 123 4567</p>
+                <p><i class="fas fa-envelope"></i> info@sipeucredit.com.sb</p>
+                <p><i class="fas fa-clock"></i> Mon - Fri: 8:00 AM - 4:30 PM</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 SIPEU. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>

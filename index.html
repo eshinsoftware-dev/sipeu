@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIPEU</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/style.css">
+    
+    <!-- Theme Configuration Override -->
+    <style>
+        :root {
+            --primary-color: #8B5E2A;
+            --secondary-color: #5A8DA8;
+            --bg-color: #FAF8F3;
+            --white: #FFFFFF;
+            --text-color: #2C2C2C;
+            --light-text: #6F6F6F;
+            --border-color: #E5E5E5;
+            
+            --success: #22C55E;
+            --warning: #FACC15;
+            --info: #3B82F6;
+        }
+    </style>
+    <script>
+        const themes = {
+            default: {
+                "--primary-color": "#8B5E2A",
+                "--secondary-color": "#5A8DA8"
+            },
+            blue: { "--primary-color": "#1E3A8A", "--secondary-color": "#3B82F6" },
+            green: { "--primary-color": "#2E7D32", "--secondary-color": "#66BB6A" },
+            gold: { "--primary-color": "#C9A227", "--secondary-color": "#E5C158" },
+            ocean: { "--primary-color": "#0EA5E9", "--secondary-color": "#38BDF8" }
+        };
+
+        function applyTheme(themeName) {
+            if (!themes[themeName]) return;
+            const theme = themes[themeName];
+            Object.keys(theme).forEach(key => {
+                document.documentElement.style.setProperty(key, theme[key]);
+            });
+            localStorage.setItem("sipeu_theme", themeName);
+        }
+
+        // Fast synchronous check to prevent FOUC (flash of unstyled content)
+        const savedTheme = localStorage.getItem("sipeu_theme");
+        if (savedTheme && themes[savedTheme]) {
+            applyTheme(savedTheme);
+        }
+        
+        // Sync both dropdown menu selections when DOM loads
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".theme-select").forEach(select => {
+                if (savedTheme) select.value = savedTheme;
+            });
+        });
+    </script>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body oncontextmenu="return false;">
+
+<nav class="navbar">
+    <div class="container">
+        <!-- Desktop Theme Switcher -->
+        <div class="theme-desktop">
+            <select class="theme-select" onchange="applyTheme(this.value)" style="border: 1px solid var(--border-color); background: var(--bg-color); color: var(--primary-color); padding: 4px 8px; border-radius: 4px; font-size: 14px; cursor: pointer; outline: none;">
+                <option value="default">Default Theme</option>
+                <option value="blue">Corporate Blue</option>
+                <option value="green">Nature Premium</option>
+                <option value="gold">Premium Gold</option>
+                <option value="ocean">Ocean Clean</option>
+            </select>
+        </div>
+
+        <a href="index.html" class="nav-brand">
+            <img src="assets/logo.png" alt="Logo">
+            <span>SIPEU</span>
+        </a>
+        
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="about.html" class="">About Us</a></li>
+            <li class="dropdown">
+                <a href="#" class="">Schemes ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="loan.html">Loan Scheme</a></li>
+                    <li><a href="advance.html">Advance Scheme</a></li>
+                </ul>
+            </li>
+            <li><a href="calculator.html" class="">Loan Calculator</a></li>
+            <li><a href="team.html" class="">Leadership & Gallery</a></li>
+            <li><a href="contact.html" class="">Contact Us</a></li>
+            
+            <li class="theme-mobile">
+                <label>Theme Selection</label>
+                <select class="theme-select" onchange="applyTheme(this.value)">
+                    <option value="default">Default Theme</option>
+                    <option value="blue">Corporate Blue</option>
+                    <option value="green">Nature Premium</option>
+                    <option value="gold">Premium Gold</option>
+                    <option value="ocean">Ocean Clean</option>
+                </select>
+            </li>
+        </ul>
+
+        <button class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>
+
+<style>
+/* Hero Section Specific Styles */
+.hero {
+    position: relative;
+    background-image: url('assets/hero.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: var(--white);
+    padding: 120px 0;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3); /* Lighter sharp overlay */
+    z-index: 1;
+}
+
+.hero .container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 20px;
+    animation: fadeInUp 1s ease;
+}
+
+.hero-content p {
+    font-size: 1.25rem;
+    color: #E0E0E0;
+    margin-bottom: 30px;
+    animation: fadeInUp 1s ease 0.2s reverse backwards;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+    animation: fadeInUp 1s ease 0.4s reverse backwards;
+}
+
+.hero-image {
+    max-width: 400px;
+    animation: fadeInRight 1s ease;
+}
+
+.hero-image img {
+    width: 100%;
+    border-radius: var(--card-radius);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@media (max-width: 768px) {
+    .hero .container {
+        flex-direction: column;
+        text-align: center;
+    }
+    .hero-buttons {
+        justify-content: center;
+    }
+    .hero-image {
+        margin-top: 40px;
+    }
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+}
+</style>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="container">
+        <div class="hero-content">
+            <img src="assets/logo.png" class="hero-logo" alt="SIPEU Logo">
+            <h1 style="animation-direction: normal; font-size: 3.5rem; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">Empowering Public Servants</h1>
+            <p style="animation-direction: normal; font-size: 1.25rem; font-weight: 300; margin-bottom: 35px; line-height: 1.6; color: rgba(255,255,255,0.95); max-width: 600px; margin-left: auto; margin-right: auto;">Flexible financial solutions designed for the dedicated public workers of the Solomon Islands. Your secure future starts here.</p>
+            <div class="hero-buttons" style="animation-direction: normal; justify-content: center;">
+                <a href="loan.html" class="btn btn-primary" style="padding: 12px 30px; border-radius: 50px; font-weight: 600;">Explore Services</a>
+                <a href="calculator.html" class="btn btn-secondary" style="padding: 12px 30px; border-radius: 50px; font-weight: 600;">Calculate Loan</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics / Achievements -->
+<section class="stats">
+  <div class="container">
+      <div class="stats-container">
+                  <div class="stat-box">
+            <div class="icon"><i class="fas fa-users"></i></div>
+            <h2>3800+</h2>
+            <p>Active Members</p>
+                      </div>
+                  <div class="stat-box">
+            <div class="icon"><i class="fas fa-calendar"></i></div>
+            <h2>1987</h2>
+            <p>Established</p>
+                      </div>
+                  <div class="stat-box">
+            <div class="icon"><i class="fas fa-chart-line"></i></div>
+            <h2>#1</h2>
+            <p>Largest Credit Union</p>
+                          <small>in Solomon Islands</small>
+                      </div>
+                  <div class="stat-box">
+            <div class="icon"><i class="fas fa-shield-alt"></i></div>
+            <h2>100%</h2>
+            <p>Trusted by</p>
+                          <small>Public Employees</small>
+                      </div>
+              </div>
+  </div>
+</section>
+
+<!-- Quick About Section -->
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <div class="text-center" style="max-width: 800px; margin: 0 auto;">
+            <div style="color: var(--secondary-color); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">COMPANY OVERVIEW</div>
+            <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Who We Are</h2>
+            <p style="font-size: 1.1rem; color: var(--text-color); margin-bottom: 30px;">
+                SIPEU Credit Limited is the public employee credit union. It was incorporated in April 1987 under the Credit Union’s Act 1986 administered by the Central Bank of Solomon Islands (CBSI).            </p>
+            <a href="about.html" class="btn btn-primary" style="background-color: var(--secondary-color);">Read Our Full Story</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>SIPEU</h3>
+                <p>To provide accessible, affordable, and sustainable financial services to public servants, fostering economic independence and growth.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 10px;"><a href="index.html" style="color: #ccc;">Home</a></li>
+                    <li style="margin-bottom: 10px;"><a href="about.html" style="color: #ccc;">About Us</a></li>
+                    <li style="margin-bottom: 10px;"><a href="services.html" style="color: #ccc;">Services</a></li>
+                    <li style="margin-bottom: 10px;"><a href="calculator.html" style="color: #ccc;">Loan Calculator</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> 123 SIPEU HQ Building, Mendana Avenue, Honiara, Solomon Islands</p>
+                <p><i class="fas fa-phone"></i> +677 123 4567</p>
+                <p><i class="fas fa-envelope"></i> info@sipeucredit.com.sb</p>
+                <p><i class="fas fa-clock"></i> Mon - Fri: 8:00 AM - 4:30 PM</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 SIPEU. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>

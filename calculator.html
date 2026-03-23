@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIPEU</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/style.css">
+    
+    <!-- Theme Configuration Override -->
+    <style>
+        :root {
+            --primary-color: #8B5E2A;
+            --secondary-color: #5A8DA8;
+            --bg-color: #FAF8F3;
+            --white: #FFFFFF;
+            --text-color: #2C2C2C;
+            --light-text: #6F6F6F;
+            --border-color: #E5E5E5;
+            
+            --success: #22C55E;
+            --warning: #FACC15;
+            --info: #3B82F6;
+        }
+    </style>
+    <script>
+        const themes = {
+            default: {
+                "--primary-color": "#8B5E2A",
+                "--secondary-color": "#5A8DA8"
+            },
+            blue: { "--primary-color": "#1E3A8A", "--secondary-color": "#3B82F6" },
+            green: { "--primary-color": "#2E7D32", "--secondary-color": "#66BB6A" },
+            gold: { "--primary-color": "#C9A227", "--secondary-color": "#E5C158" },
+            ocean: { "--primary-color": "#0EA5E9", "--secondary-color": "#38BDF8" }
+        };
+
+        function applyTheme(themeName) {
+            if (!themes[themeName]) return;
+            const theme = themes[themeName];
+            Object.keys(theme).forEach(key => {
+                document.documentElement.style.setProperty(key, theme[key]);
+            });
+            localStorage.setItem("sipeu_theme", themeName);
+        }
+
+        // Fast synchronous check to prevent FOUC (flash of unstyled content)
+        const savedTheme = localStorage.getItem("sipeu_theme");
+        if (savedTheme && themes[savedTheme]) {
+            applyTheme(savedTheme);
+        }
+        
+        // Sync both dropdown menu selections when DOM loads
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".theme-select").forEach(select => {
+                if (savedTheme) select.value = savedTheme;
+            });
+        });
+    </script>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body oncontextmenu="return false;">
+
+<nav class="navbar">
+    <div class="container">
+        <!-- Desktop Theme Switcher -->
+        <div class="theme-desktop">
+            <select class="theme-select" onchange="applyTheme(this.value)" style="border: 1px solid var(--border-color); background: var(--bg-color); color: var(--primary-color); padding: 4px 8px; border-radius: 4px; font-size: 14px; cursor: pointer; outline: none;">
+                <option value="default">Default Theme</option>
+                <option value="blue">Corporate Blue</option>
+                <option value="green">Nature Premium</option>
+                <option value="gold">Premium Gold</option>
+                <option value="ocean">Ocean Clean</option>
+            </select>
+        </div>
+
+        <a href="index.html" class="nav-brand">
+            <img src="assets/logo.png" alt="Logo">
+            <span>SIPEU</span>
+        </a>
+        
+        <ul class="nav-links">
+            <li><a href="index.html" class="">Home</a></li>
+            <li><a href="about.html" class="">About Us</a></li>
+            <li class="dropdown">
+                <a href="#" class="">Schemes ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="loan.html">Loan Scheme</a></li>
+                    <li><a href="advance.html">Advance Scheme</a></li>
+                </ul>
+            </li>
+            <li><a href="calculator.html" class="active">Loan Calculator</a></li>
+            <li><a href="team.html" class="">Leadership & Gallery</a></li>
+            <li><a href="contact.html" class="">Contact Us</a></li>
+            
+            <li class="theme-mobile">
+                <label>Theme Selection</label>
+                <select class="theme-select" onchange="applyTheme(this.value)">
+                    <option value="default">Default Theme</option>
+                    <option value="blue">Corporate Blue</option>
+                    <option value="green">Nature Premium</option>
+                    <option value="gold">Premium Gold</option>
+                    <option value="ocean">Ocean Clean</option>
+                </select>
+            </li>
+        </ul>
+
+        <button class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>
+
+<style>
+.calc-container {
+    background: var(--white);
+    padding: 40px;
+    border-radius: var(--card-radius);
+    box-shadow: var(--box-shadow);
+    max-width: 1000px;
+    margin: -40px auto 40px;
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.form-control:focus {
+    border-color: var(--secondary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(90, 141, 168, 0.2);
+}
+
+.calc-results {
+    background: var(--bg-color);
+    padding: 30px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.result-item {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.result-item h4 {
+    margin-bottom: 5px;
+    color: var(--light-text);
+    font-size: 1rem;
+}
+
+.result-item h2 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin: 0;
+}
+
+.schedule-table {
+    width: 100%;
+    max-width: 1000px;
+    margin: 40px auto;
+    border-collapse: collapse;
+    background: var(--white);
+    box-shadow: var(--box-shadow);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    display: none;
+}
+
+.schedule-table th, .schedule-table td {
+    padding: 12px 20px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.schedule-table th {
+    background: var(--secondary-color);
+    color: var(--white);
+}
+
+@media (max-width: 768px) {
+    .calc-container {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<section class="page-banner" style="background-image: url('assets/hero.jpg');">
+    <div class="overlay"></div>
+    <div class="banner-content container">
+        <h1>Advanced Loan Calculator</h1>
+        <p>Plan your finances with our transparent loan estimation tool.</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="calc-container">
+        <div class="calc-form">
+            <h3 style="margin-bottom: 25px;">Loan Details</h3>
+            
+            <div class="form-group">
+                <label>Loan Amount ($)</label>
+                <input type="number" id="loanAmount" class="form-control" placeholder="e.g. 50000" value="50000">
+            </div>
+            
+            <div class="form-group" style="display: grid; grid-template-columns: 2fr 1fr; gap: 15px;">
+                <div>
+                    <label>Interest Rate (%)</label>
+                    <input type="number" id="interestRate" class="form-control" placeholder="e.g. 10" value="10">
+                </div>
+                <div>
+                    <label>Rate Type</label>
+                    <select id="rateType" class="form-control">
+                        <option value="yearly">Yearly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="daily">Daily</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <label>Tenure Value</label>
+                    <input type="number" id="tenureValue" class="form-control" placeholder="e.g. 5" value="5">
+                </div>
+                <div>
+                    <label>Tenure Type</label>
+                    <select id="tenureType" class="form-control">
+                        <option value="yearly">Years</option>
+                        <option value="half-yearly">Half-Years</option>
+                        <option value="monthly">Months</option>
+                        <option value="fortnight">Fortnights</option>
+                        <option value="weekly">Weeks</option>
+                        <option value="daily">Days</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button id="calculateBtn" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Calculate Estimation</button>
+        </div>
+        
+        <div class="calc-results">
+            <div class="result-item">
+                <h4>Estimated Installment (EMI)</h4>
+                <h2 id="emiResult">$0.00</h2>
+            </div>
+            <div class="result-item">
+                <h4>Total Interest</h4>
+                <h2 id="interestResult">$0.00</h2>
+            </div>
+            <div class="result-item">
+                <h4>Total Payment</h4>
+                <h2 id="totalResult">$0.00</h2>
+            </div>
+        </div>
+    </div>
+    
+    <div id="scheduleContainer" style="overflow-x: auto;">
+        <table class="schedule-table" id="scheduleTable">
+            <thead>
+                <tr>
+                    <th>Installment No.</th>
+                    <th>Beginning Balance</th>
+                    <th>Payment</th>
+                    <th>Principal</th>
+                    <th>Interest</th>
+                    <th>Ending Balance</th>
+                </tr>
+            </thead>
+            <tbody id="scheduleBody">
+                <!-- Populated via JS -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+document.getElementById('calculateBtn').addEventListener('click', calculateLoan);
+
+function calculateLoan() {
+    let p = parseFloat(document.getElementById('loanAmount').value);
+    let rInput = parseFloat(document.getElementById('interestRate').value);
+    let rType = document.getElementById('rateType').value;
+    let tValue = parseFloat(document.getElementById('tenureValue').value);
+    let tType = document.getElementById('tenureType').value;
+    
+    if(isNaN(p) || isNaN(rInput) || isNaN(tValue) || p <= 0 || rInput < 0 || tValue <= 0) {
+        alert("Please enter valid positive numbers.");
+        return;
+    }
+
+    // Convert everything to months for baseline calculation, then adjust for actual EMI frequency
+    // Installment Frequency Array (installments per year)
+    const freqMap = {
+        'yearly': 1,
+        'half-yearly': 2,
+        'monthly': 12,
+        'fortnight': 26,
+        'weekly': 52,
+        'daily': 365
+    };
+    
+    // Convert interest rate to annual rate
+    let annualRate = rInput;
+    if(rType === 'monthly') annualRate = rInput * 12;
+    if(rType === 'daily') annualRate = rInput * 365;
+    
+    // Total number of installments based on tenure type
+    let totalInstallments = tValue;
+    if(tType === 'yearly') totalInstallments = tValue * freqMap['yearly'];
+    else if(tType === 'half-yearly') totalInstallments = tValue * freqMap['half-yearly'] / 2; // Roughly assuming tenureValue is in half-years
+    else if(tType === 'monthly') totalInstallments = tValue * freqMap['monthly'] / 12;
+    else if(tType === 'fortnight') totalInstallments = tValue * freqMap['fortnight'] / 26;
+    else if(tType === 'weekly') totalInstallments = tValue * freqMap['weekly'] / 52;
+    else if(tType === 'daily') totalInstallments = tValue * freqMap['daily'] / 365;
+    
+    totalInstallments = Math.round(totalInstallments);
+    if(totalInstallments < 1) totalInstallments = 1;
+    
+    // Rate per installment
+    let ratePerInstallment = (annualRate / 100) / freqMap[tType];
+    if(tType === 'half-yearly') ratePerInstallment = (annualRate / 100) / 2;
+    if(tType === 'yearly') ratePerInstallment = (annualRate / 100);
+    // Adjusting roughly based on standard banking formulas
+    
+    let emi;
+    if(ratePerInstallment === 0) {
+        emi = p / totalInstallments;
+    } else {
+        emi = p * ratePerInstallment * Math.pow(1 + ratePerInstallment, totalInstallments) / (Math.pow(1 + ratePerInstallment, totalInstallments) - 1);
+    }
+    
+    let totalPayment = emi * totalInstallments;
+    let totalInterest = totalPayment - p;
+    
+    // Update UI Elements
+    document.getElementById('emiResult').innerText = "$" + emi.toFixed(2);
+    document.getElementById('interestResult').innerText = "$" + totalInterest.toFixed(2);
+    document.getElementById('totalResult').innerText = "$" + totalPayment.toFixed(2);
+    
+    // Generate Schedule Table
+    generateSchedule(p, ratePerInstallment, emi, totalInstallments);
+}
+
+function generateSchedule(principal, rate, emi, periods) {
+    let tbody = document.getElementById('scheduleBody');
+    tbody.innerHTML = '';
+    
+    let balance = principal;
+    
+    // Limit periods to prevent browser crash (max 365 lines)
+    let maxPeriods = Math.min(periods, 365);
+    
+    for(let i = 1; i <= maxPeriods; i++) {
+        let interest = balance * rate;
+        let p_amount = emi - interest;
+        
+        let endBalance = balance - p_amount;
+        if(endBalance < 0) endBalance = 0;
+        
+        let row = `<tr>
+            <td>${i}</td>
+            <td>$${balance.toFixed(2)}</td>
+            <td>$${emi.toFixed(2)}</td>
+            <td>$${p_amount.toFixed(2)}</td>
+            <td>$${interest.toFixed(2)}</td>
+            <td>$${endBalance.toFixed(2)}</td>
+        </tr>`;
+        
+        tbody.innerHTML += row;
+        balance = endBalance;
+        
+        if(balance <= 0) break;
+    }
+    
+    if(periods > 365) {
+        tbody.innerHTML += `<tr><td colspan="6" style="text-align:center; color:gray;">... Output truncated for performance (Showing 365 of ${periods} periods) ...</td></tr>`;
+    }
+    
+    document.getElementById('scheduleTable').style.display = 'table';
+}
+
+// Initial Calculation
+window.onload = function() {
+    calculateLoan();
+};
+</script>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>SIPEU</h3>
+                <p>To provide accessible, affordable, and sustainable financial services to public servants, fostering economic independence and growth.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 10px;"><a href="index.html" style="color: #ccc;">Home</a></li>
+                    <li style="margin-bottom: 10px;"><a href="about.html" style="color: #ccc;">About Us</a></li>
+                    <li style="margin-bottom: 10px;"><a href="services.html" style="color: #ccc;">Services</a></li>
+                    <li style="margin-bottom: 10px;"><a href="calculator.html" style="color: #ccc;">Loan Calculator</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> 123 SIPEU HQ Building, Mendana Avenue, Honiara, Solomon Islands</p>
+                <p><i class="fas fa-phone"></i> +677 123 4567</p>
+                <p><i class="fas fa-envelope"></i> info@sipeucredit.com.sb</p>
+                <p><i class="fas fa-clock"></i> Mon - Fri: 8:00 AM - 4:30 PM</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 SIPEU. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>

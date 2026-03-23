@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIPEU</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/style.css">
+    
+    <!-- Theme Configuration Override -->
+    <style>
+        :root {
+            --primary-color: #8B5E2A;
+            --secondary-color: #5A8DA8;
+            --bg-color: #FAF8F3;
+            --white: #FFFFFF;
+            --text-color: #2C2C2C;
+            --light-text: #6F6F6F;
+            --border-color: #E5E5E5;
+            
+            --success: #22C55E;
+            --warning: #FACC15;
+            --info: #3B82F6;
+        }
+    </style>
+    <script>
+        const themes = {
+            default: {
+                "--primary-color": "#8B5E2A",
+                "--secondary-color": "#5A8DA8"
+            },
+            blue: { "--primary-color": "#1E3A8A", "--secondary-color": "#3B82F6" },
+            green: { "--primary-color": "#2E7D32", "--secondary-color": "#66BB6A" },
+            gold: { "--primary-color": "#C9A227", "--secondary-color": "#E5C158" },
+            ocean: { "--primary-color": "#0EA5E9", "--secondary-color": "#38BDF8" }
+        };
+
+        function applyTheme(themeName) {
+            if (!themes[themeName]) return;
+            const theme = themes[themeName];
+            Object.keys(theme).forEach(key => {
+                document.documentElement.style.setProperty(key, theme[key]);
+            });
+            localStorage.setItem("sipeu_theme", themeName);
+        }
+
+        // Fast synchronous check to prevent FOUC (flash of unstyled content)
+        const savedTheme = localStorage.getItem("sipeu_theme");
+        if (savedTheme && themes[savedTheme]) {
+            applyTheme(savedTheme);
+        }
+        
+        // Sync both dropdown menu selections when DOM loads
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".theme-select").forEach(select => {
+                if (savedTheme) select.value = savedTheme;
+            });
+        });
+    </script>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body oncontextmenu="return false;">
+
+<nav class="navbar">
+    <div class="container">
+        <!-- Desktop Theme Switcher -->
+        <div class="theme-desktop">
+            <select class="theme-select" onchange="applyTheme(this.value)" style="border: 1px solid var(--border-color); background: var(--bg-color); color: var(--primary-color); padding: 4px 8px; border-radius: 4px; font-size: 14px; cursor: pointer; outline: none;">
+                <option value="default">Default Theme</option>
+                <option value="blue">Corporate Blue</option>
+                <option value="green">Nature Premium</option>
+                <option value="gold">Premium Gold</option>
+                <option value="ocean">Ocean Clean</option>
+            </select>
+        </div>
+
+        <a href="index.html" class="nav-brand">
+            <img src="assets/logo.png" alt="Logo">
+            <span>SIPEU</span>
+        </a>
+        
+        <ul class="nav-links">
+            <li><a href="index.html" class="">Home</a></li>
+            <li><a href="about.html" class="">About Us</a></li>
+            <li class="dropdown">
+                <a href="#" class="active">Schemes ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="loan.html">Loan Scheme</a></li>
+                    <li><a href="advance.html">Advance Scheme</a></li>
+                </ul>
+            </li>
+            <li><a href="calculator.html" class="">Loan Calculator</a></li>
+            <li><a href="team.html" class="">Leadership & Gallery</a></li>
+            <li><a href="contact.html" class="">Contact Us</a></li>
+            
+            <li class="theme-mobile">
+                <label>Theme Selection</label>
+                <select class="theme-select" onchange="applyTheme(this.value)">
+                    <option value="default">Default Theme</option>
+                    <option value="blue">Corporate Blue</option>
+                    <option value="green">Nature Premium</option>
+                    <option value="gold">Premium Gold</option>
+                    <option value="ocean">Ocean Clean</option>
+                </select>
+            </li>
+        </ul>
+
+        <button class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>
+
+<style>
+.schemes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.scheme-card {
+    background: var(--white);
+    padding: 30px;
+    border-radius: var(--card-radius);
+    box-shadow: var(--box-shadow);
+    border-top: 5px solid var(--secondary-color);
+}
+
+.scheme-card ul {
+    list-style: none;
+    margin-top: 15px;
+}
+
+.scheme-card ul li {
+    padding-left: 25px;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.scheme-card ul li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+/* Timeline UI */
+.process-timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 50px auto 0;
+    padding-bottom: 40px;
+}
+
+.process-timeline::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    background-color: var(--secondary-color);
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -2px;
+}
+
+.process-item {
+    padding: 10px 40px;
+    position: relative;
+    background-color: inherit;
+    width: 50%;
+}
+
+.process-item::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    right: -12px;
+    background-color: var(--white);
+    border: 4px solid var(--primary-color);
+    top: 15px;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.process-item.left { left: 0; }
+.process-item.right { left: 50%; }
+.process-item.right::after { left: -13px; }
+
+.process-content {
+    padding: 20px 30px;
+    background-color: var(--white);
+    position: relative;
+    border-radius: var(--card-radius);
+    box-shadow: var(--box-shadow);
+}
+
+@media screen and (max-width: 600px) {
+    .process-timeline::after { left: 31px; }
+    .process-item { width: 100%; padding-left: 70px; padding-right: 25px; }
+    .process-item::after { left: 18px; }
+    .process-item.left::after, .process-item.right::after { left: 18px; }
+    .process-item.right { left: 0%; }
+}
+</style>
+
+<section class="page-banner" style="background-image: url('assets/hero.jpg');">
+    <div class="overlay"></div>
+    <div class="banner-content container">
+        <h1>Loan Scheme</h1>
+        <p>Comprehensive financial loan options tailored for your needs.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2 class="text-center">Available Loan Schemes</h2>
+        <div class="schemes-grid">
+                        <div class="scheme-card">
+                <h3>Small Loan</h3>
+                <p>Quick access to funds for minor expenses with minimal processing time.</p>
+                <ul>
+                                        <li>Fast Approval</li>
+                                        <li>Flexible Repayment</li>
+                                        <li>Competitive Rates</li>
+                                    </ul>
+            </div>
+                        <div class="scheme-card">
+                <h3>Medium Loan</h3>
+                <p>Ideal for significant purchases, home improvements, or medical emergencies.</p>
+                <ul>
+                                        <li>Higher Limit</li>
+                                        <li>Extended Tenure</li>
+                                        <li>Low Interest</li>
+                                    </ul>
+            </div>
+                        <div class="scheme-card">
+                <h3>Large Loan</h3>
+                <p>Designed for major investments, vehicle purchases, or substantial asset acquisition.</p>
+                <ul>
+                                        <li>Maximum Funding</li>
+                                        <li>Long-term Repayment</li>
+                                        <li>Dedicated Support</li>
+                                    </ul>
+            </div>
+                        <div class="scheme-card">
+                <h3>Education Loan</h3>
+                <p>Invest in your future or your children&#039;s education with our specialized scheme.</p>
+                <ul>
+                                        <li>Grace Periods Available</li>
+                                        <li>Direct Institution Payments</li>
+                                        <li>Low Rates</li>
+                                    </ul>
+            </div>
+                        <div class="scheme-card">
+                <h3>Emergency Loan</h3>
+                <p>Immediate financial relief for unforeseen circumstances.</p>
+                <ul>
+                                        <li>24-Hour Disbursement</li>
+                                        <li>Minimal Documentation</li>
+                                        <li>Easy Access</li>
+                                    </ul>
+            </div>
+                    </div>
+    </div>
+</section>
+
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <h2 class="text-center" style="color: var(--primary-color); margin-bottom: 40px;">Loan Application Process</h2>
+        <div class="process-timeline">
+                        <div class="process-item left">
+                <div class="process-content">
+                    <h4 style="color: var(--secondary-color); font-size: 1.25rem; margin-bottom: 10px;">Step 1: Application Submission</h4>
+                    <ul style="padding-left: 20px; margin: 0; color: var(--light-text); font-size: 1rem; line-height: 1.6;">
+                                                <li style="margin-bottom: 5px;">Member fills out loan application form</li>
+                                                <li style="margin-bottom: 5px;">Submit to Loans Officer at front counter</li>
+                                                <li style="margin-bottom: 5px;">Provincial members submit via fax</li>
+                                            </ul>
+                </div>
+            </div>
+                        <div class="process-item right">
+                <div class="process-content">
+                    <h4 style="color: var(--secondary-color); font-size: 1.25rem; margin-bottom: 10px;">Step 2: Eligibility Check</h4>
+                    <ul style="padding-left: 20px; margin: 0; color: var(--light-text); font-size: 1rem; line-height: 1.6;">
+                                                <li style="margin-bottom: 5px;">Loans Officer verifies eligibility</li>
+                                                <li style="margin-bottom: 5px;">70% recovery rule applied</li>
+                                                <li style="margin-bottom: 5px;">Application filed and sent to Credit Committee</li>
+                                            </ul>
+                </div>
+            </div>
+                        <div class="process-item left">
+                <div class="process-content">
+                    <h4 style="color: var(--secondary-color); font-size: 1.25rem; margin-bottom: 10px;">Step 3: Approval Process</h4>
+                    <ul style="padding-left: 20px; margin: 0; color: var(--light-text); font-size: 1rem; line-height: 1.6;">
+                                                <li style="margin-bottom: 5px;">Credit Committee reviews applications</li>
+                                                <li style="margin-bottom: 5px;">Ensure compliance with lending policy</li>
+                                                <li style="margin-bottom: 5px;">Approved applications signed by 3 members</li>
+                                                <li style="margin-bottom: 5px;">Rejected applications returned</li>
+                                            </ul>
+                </div>
+            </div>
+                        <div class="process-item right">
+                <div class="process-content">
+                    <h4 style="color: var(--secondary-color); font-size: 1.25rem; margin-bottom: 10px;">Step 4: Payment Processing</h4>
+                    <ul style="padding-left: 20px; margin: 0; color: var(--light-text); font-size: 1rem; line-height: 1.6;">
+                                                <li style="margin-bottom: 5px;">Accountant verifies documents</li>
+                                                <li style="margin-bottom: 5px;">Payment via check or bank transfer</li>
+                                                <li style="margin-bottom: 5px;">Records updated in system</li>
+                                            </ul>
+                </div>
+            </div>
+                        <div class="process-item left">
+                <div class="process-content">
+                    <h4 style="color: var(--secondary-color); font-size: 1.25rem; margin-bottom: 10px;">Step 5: Reconciliation &amp; Reporting</h4>
+                    <ul style="padding-left: 20px; margin: 0; color: var(--light-text); font-size: 1rem; line-height: 1.6;">
+                                                <li style="margin-bottom: 5px;">Monthly reconciliation of accounts</li>
+                                                <li style="margin-bottom: 5px;">Loan &amp; share balance verification</li>
+                                                <li style="margin-bottom: 5px;">Reports submitted to management and board</li>
+                                            </ul>
+                </div>
+            </div>
+                    </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>SIPEU</h3>
+                <p>To provide accessible, affordable, and sustainable financial services to public servants, fostering economic independence and growth.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 10px;"><a href="index.html" style="color: #ccc;">Home</a></li>
+                    <li style="margin-bottom: 10px;"><a href="about.html" style="color: #ccc;">About Us</a></li>
+                    <li style="margin-bottom: 10px;"><a href="services.html" style="color: #ccc;">Services</a></li>
+                    <li style="margin-bottom: 10px;"><a href="calculator.html" style="color: #ccc;">Loan Calculator</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> 123 SIPEU HQ Building, Mendana Avenue, Honiara, Solomon Islands</p>
+                <p><i class="fas fa-phone"></i> +677 123 4567</p>
+                <p><i class="fas fa-envelope"></i> info@sipeucredit.com.sb</p>
+                <p><i class="fas fa-clock"></i> Mon - Fri: 8:00 AM - 4:30 PM</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 SIPEU. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>
